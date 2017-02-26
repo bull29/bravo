@@ -6,14 +6,14 @@ welcome! notable documentation is outlined below
 hook.Clean( string event ) -- Clears all (lua) functions associated with an event
 hook.SearchCode( string code ) -- Traverses through EVERY single hook function added through lua and displays if it found any. Useful for finding those pesky print statements. Warning: Resource intensive 
 hook.RunOnce( string event, function func ) -- Runs any function just once on a hook. Alternative to hook.Add
-	-- Alternatively; can be called directly on a string
-	("HUDPaint"):RunOnce( function func )
+	-- Alternatively; can be called directly on a string. See Examples:
+	  ("HUDPaint"):RunOnce( function() LocalPlayerFinallyValid() end )
+	  ("PlayerSpawn"):RunOnce( function( pl ) pl:Kill() end )
 ```
 ## panel
 ```lua
 panel:GetHorizontalPos() -- returns the panel's x position
 panel:GetVerticalPos() -- returns the panel's y position
-
 panel:SetHorizontalPos( number n ) -- sets the panel's y position
 panel:SetVerticalPos( number n ) -- sets the panel's x position
 
