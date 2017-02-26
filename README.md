@@ -14,7 +14,8 @@ panel:GetHorizontalPos() -- returns the panel's x position
 panel:GetVerticalPos() -- returns the panel's y position
 panel:SetHorizontalPos( number n ) -- sets the panel's y position
 panel:SetVerticalPos( number n ) -- sets the panel's x position
-
+panel:RecurseChildren( function func ) -- Runs a function( Panel panel ) on a panel and every single child recursively 
+panel:pDock( number padding ) -- 'Fake' Docks a panel by using panel.SetSize and panel.SetPos - Takes into account DFrames
 ```
 ## color
 
