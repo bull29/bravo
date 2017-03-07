@@ -11,6 +11,7 @@
 local assert = assert
 local type = type
 local pairs = pairs
+local tostring = tostring
 local debug = debug
 --:: Hooks
 local hook = hook
@@ -23,6 +24,7 @@ function hook.OnCount(event, number, func)
 	temp = temp + 1
 	local start = 0
 	local tc = 'temporary_hook_' .. temp
+
 	hook.Add(event, tc, function(...)
 		start = start + 1
 
@@ -44,6 +46,7 @@ function hook.RunOnce(event, func)
 
 	hook.Add(event, c, function(...)
 		hook.Remove(event, c)
+
 		return func(...)
 	end)
 end
@@ -107,38 +110,40 @@ function cmeta.__sub(a, b)
 	end
 end
 
-function cmeta:Approach( b, n )
-	return Color( ma( self.r, b.r, n ), ma( self.g, b.g, n ), ma( self.b, b.b, n ), ma( self.a, b.a, n ))
+function cmeta:Approach(b, n)
+	return Color(ma(self.r, b.r, n), ma(self.g, b.g, n), ma(self.b, b.b, n), ma(self.a, b.a, n))
 end
 
-function cmeta:Lerp( b, n )
-	return Color( lp( n, self.r, b.r ), lp( n, self.g, b.g ), lp( n, self.b, b.b ), lp( n, self.a, b.a ))
+function cmeta:Lerp(b, n)
+	return Color(lp(n, self.r, b.r), lp(n, self.g, b.g), lp(n, self.b, b.b), lp(n, self.a, b.a))
 end
 
 --:: Strings
 local strmeta = getmetatable''
 local string = string
 
-function strmeta.__unm(a)
-	local str = ''
+if false then
+	function strmeta.__unm(a)
+		local str = ''
 
-	for i = string.len(a), 1, -1 do
-		str = str .. string.sub(a, i, i)
+		for i = string.len(a), 1, -1 do
+			str = str .. string.sub(a, i, i)
+		end
+
+		return str
 	end
 
-	return str
-end
+	function strmeta.__add(a, b)
+		return a .. b
+	end
 
-function strmeta.__add(a, b)
-	return a .. b
-end
+	function strmeta.__mod(a, b)
+		return string.find(a, tostring(b)) or false
+	end
 
-function strmeta.__mod(a, b)
-	return string.find(a, b) or false
-end
-
-function strmeta.__pow(a, b)
-	return string.rep(a, b)
+	function strmeta.__pow(a, b)
+		return string.rep(a, b)
+	end
 end
 
 function string.RunOnce(event, func)
@@ -201,7 +206,9 @@ if CLIENT then
 			self:SetSize(p:GetWide() - amount * 2, p:GetTall() - amount * 2)
 		end
 	end
+end
 
+--[[ 
 	function pmeta:KeepSize()
 		if not self:GetParent() then return end
 		if not self.Paint then return end
@@ -232,9 +239,7 @@ if CLIENT then
 
 			return s.PaintOld(s, w, h)
 		end
-	end
-end
-
+	end--]]
 --:: Misc
 function ExecuteScriptOnEvent(event)
 	local dme = debug.getinfo(2, 'S')
@@ -265,7 +270,13 @@ if SERVER then
 		local sl = ServerLog
 
 		function print(...)
-			sl(table.concat({..., '\t'}))
+			local str = ""
+
+			for k, v in pairs({...}) do
+				str = str .. "\t" .. tostring(v)
+			end
+
+			sl(str)
 
 			return printOld(...)
 		end
